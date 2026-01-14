@@ -23,7 +23,7 @@ Foi identificado um acesso legítimo:
 Este evento não indica comportamento malicioso.
 
 ## 5. Tipo de ataque identificado
-➡ **Ataque de Força Bruta via SSH**  
+ **Ataque de Força Bruta via SSH**  
 Características observadas:
 - Muitas tentativas de senha em sequência  
 - Vários usuários padrão  
@@ -42,5 +42,6 @@ Características observadas:
 Os registros analisados indicam um ataque de força bruta direcionado principalmente ao usuário root.  
 Nenhuma intrusão bem-sucedida foi identificada.  
 A implementação das medidas recomendadas reduz drasticamente o risco.
+
 
 
