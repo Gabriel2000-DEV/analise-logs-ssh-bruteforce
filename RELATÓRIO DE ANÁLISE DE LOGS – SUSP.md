@@ -1,47 +1,59 @@
-# Relatório de Análise de Logs – Suspeita de Ataque de Força Bruta SSH
+**Relatório de Análise de Logs - SSH Brute Force**
 
-## 1. Visão Geral
-Foi realizada a análise do arquivo `auth.log` para identificar tentativas de acesso indevido ao serviço SSH do servidor.  
-Foram encontrados diversos eventos de falha de autenticação, indicando possível ataque de força bruta.
+**1. Objetivo da Análise**
 
-## 2. Endereços IP suspeitos
-- 185.231.247.91  
-- 45.91.201.33  
-- 102.223.94.12  
+Auditar o arquivo /var/log/auth.log para identificar tentativas de invasão via SSH e validar se acessos legítimos ocorreram no período selecionado.
 
-Esses IPs repetem tentativas em poucos segundos, indicando automação (bots).
+**2. Metodologia (Comandos Utilizados)**
 
-## 3. Usuários atacados
-- admin (inválido)  
-- root (alvo crítico)  
-- teste (inválido)  
-- oráculo (inválido)  
+Para extrair as informações dos logs de forma rápida, utilizei ferramentas nativas do Linux no terminal:
 
-## 4. Login bem-sucedido
-Foi identificado um acesso legítimo:  
-`Senha aceita para Gabriel a partir de 179.209.135.42`  
-Este evento não indica comportamento malicioso.
+**A. Filtrando tentativas de login com usuários inválidos**
+Usei este comando para ver quais nomes de usuários os atacantes estavam tentando chutar:
 
-## 5. Tipo de ataque identificado
- **Ataque de Força Bruta via SSH**  
-Características observadas:
-- Muitas tentativas de senha em sequência  
-- Vários usuários padrão  
-- IPs internacionais  
-- Tentativas falhando constantemente  
+Bash
+grep "invalid user" auth.log | awk '{print $9}' | sort | uniq -c | sort -nr
+°Resultado: Identifiquei tentativas para admin, oracle e test.
 
-## 6. Ações recomendadas
-- Bloquear os IPs maliciosos no firewall  
-- Implementar Fail2Ban para bloquear tentativas repetidas  
-- Desabilitar login via root pelo SSH  
-- Alterar a porta padrão (22) para outra  
-- Habilitar autenticação por chaves SSH  
-- Monitorar regularmente o `auth.log`  
+**B. Identificando os IPs que mais atacaram**
+Para isolar quem estava tentando forçar a entrada no servidor:
 
-##  Conclusão
-Os registros analisados indicam um ataque de força bruta direcionado principalmente ao usuário root.  
-Nenhuma intrusão bem-sucedida foi identificada.  
-A implementação das medidas recomendadas reduz drasticamente o risco.
+Bash
+grep "Failed password" auth.log | awk '{print $(NF-3)}' | sort | uniq -c | sort -nr
 
+Top Ofensores:
+
+° 45.91.201.33 (Focado no root)
+
+° 185.231.247.91 (Tentando múltiplos usuários)
+
+**C. Verificando Logins Bem-Sucedidos**
+O comando mais importante para saber se o servidor foi comprometido:
+
+Bash
+grep "Accepted password" auth.log
+
+°Evento Detectado: Usuário gabriel logou com sucesso às 05:44:20.
+
+**3. Diagnóstico Técnico**
+
+Atacante IP | Alvo | Comportamento
+45.91.201.33| root |Brute-force persistente. Tentativas em intervalos curtos.
+185.231.247.91 | admin/test | Scanner de vulnerabilidades (Credential Stuffing).
+102.223.94.12 | oracle | Busca por bancos de dados expostos.
+
+**Status de Segurança:** O servidor sofreu uma tentativa de invasão automatizada, mas os ataques foram repelidos. O único acesso bem-sucedido foi do usuário gabriel.
+
+**4. Recomendações de Segurança (Remediação)**
+
+Com base na análise, as seguintes medidas são sugeridas para "fechar" o servidor:
+
+**1. Instalar o Fail2Ban:** Para banir automaticamente IPs que errarem a senha 3 vezes.
+
+**2. Desativar login de Root:** Alterar PermitRootLogin no no arquivo sshd_config.
+
+**3. Mudar a porta do SSH:** Sair da porta padrão (22) para reduzir o barulho de bots.
+
+**4. Autenticação por Chave (Ed25519):** Desativar senhas e usar apenas chaves criptográficas.
 
 
