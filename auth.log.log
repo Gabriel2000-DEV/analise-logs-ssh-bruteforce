@@ -2,10 +2,11 @@ Jan 12 05:43:21 server sshd[1245]: Failed password for invalid user admin from 1
 Jan 12 05:43:22 server sshd[1245]: Failed password for invalid user admin from 185.231.247.91 port 45821 ssh2
 Jan 12 05:43:26 server sshd[1250]: Failed password for root from 45.91.201.33 port 51244 ssh2
 Jan 12 05:43:30 server sshd[1250]: Failed password for root from 45.91.201.33 port 51244 ssh2
-Jan 12 05:43:31 server sshd[1302]: Failed password for user test from 185.231.247.91 port 45890 ssh2
+Jan 12 05:43:31 server sshd[1302]: Failed password for invalid user test from 185.231.247.91 port 45890 ssh2
 Jan 12 05:43:35 server sshd[1311]: Failed password for invalid user oracle from 102.223.94.12 port 39011 ssh2
 Jan 12 05:43:42 server sshd[1311]: Failed password for invalid user oracle from 102.223.94.12 port 39011 ssh2
 Jan 12 05:44:20 server sshd[1491]: Accepted password for gabriel from 179.209.135.42 port 48810 ssh2
+Jan 12 05:44:20 server sshd[1491]: pam_unix(sshd:session): session opened for user gabriel by (uid=0)
 Jan 12 05:45:21 server sshd[1511]: Failed password for root from 45.91.201.33 port 51244 ssh2
 Jan 12 05:45:22 server sshd[1511]: Failed password for root from 45.91.201.33 port 51244 ssh2
 Jan 12 05:45:33 server sshd[1511]: Failed password for root from 45.91.201.33 port 51244 ssh2
