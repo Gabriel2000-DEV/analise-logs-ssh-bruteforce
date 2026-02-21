@@ -1,32 +1,30 @@
-**Analise-logs-ssh-bruteforce**
-Projeto de análise de logs para identificação de ataque de força bruta SSH.
-**Análise de Logs – Ataque de Força Bruta SSH
+**Análise de Logs - SSH Brute Force**
+Projeto focado em auditoria de segurança e análise forense de logs no Linux (auth.log). O objetivo aqui foi identificar padrões de ataques automatizados e validar acessos legítimos.
 
-**Descrição**
-Projeto de cibersegurança criado para praticar análise de logs Linux e identificação de ataques em ambientes reais.
+**O Cenário**
+Subi um servidor exposto à internet e, em pouco tempo, os logs de autenticação começaram a registrar tentativas de invasão. Este repositório contém o dump desses logs e a metodologia que usei para filtrar os ataques.
 
- **Objetivo**
+**Ferramentas Utilizadas**
+Para não perder tempo abrindo arquivo gigante na mão, usei o básico de sobrevivência no terminal Linux:
 
-Identificar tentativas de autenticação suspeitas no arquivo auth.log e determinar se há evidências de ataque de força bruta via SSH.
+grep: Para filtrar as falhas e sucessos.
 
-**Tecnologias utilizadas**
+awk: Para isolar os endereços IP e nomes de usuários.
 
--Linux (Kali/Ubuntu)
--Terminal / Shell
--Ferramentas de análise de logs (grep, awk, sort)
--GitHub para documentação
+sort / uniq: Para contar quantas vezes cada IP tentou forçar a entrada.
 
-**Arquivos incluídos**
+**O que os logs revelaram**
+Após passar o pente fino no auth.log, identifiquei o seguinte:
 
--auth.log → logs reais simulados
--relatorio-analise-logs.md → relatório profissional da análise
+Ataque de Dicionário: O IP 185.231.247.91 testou usuários comuns como admin e test.
 
-**Resultado da análise**
+Persistência no Root: O IP 45.91.201.33 focou exclusivamente no usuário root, tentando várias vezes em um curto intervalo de tempo.
 
-Foi identificado um ataque de força bruta SSH, com múltiplas tentativas de login falhas usando usuários comuns como root, admin e test.
+Acesso Confirmado: O usuário gabriel logou com sucesso às 05:44:20 (IP 179.209.135.42).
 
-Nenhuma intrusão bem-sucedida foi encontrada.
+Nota: Em uma auditoria real, eu verificaria se esse IP de origem é conhecido pelo usuário.
 
-**Relatório completo**
+**Arquivos do Projeto**
+auth.log: O "dump" bruto com as tentativas de login.
 
-Você pode visualizar aqui: relatorio-analise-logs.md
+relatorio-analise-logs.md: Onde detalhei os comandos que usei e as conclusões da defesa.
